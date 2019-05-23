@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Project Interface</title>
+    <style type="text/css">
+    label {
+        font-size: 20px;
+        font-weight: bold;
+        width: 20%;
+        clear: left;
+        text-align: right;
+        padding-right: 10px;
+    }
+
+    form {
+        margin-top: 5%;
+    }
+
+    button {
+        font-size: 14px;
+        font-weight: bold;
+        margin-left: 15%;
+        width: 80px;
+        height: 30px;
+    }
+    #prediction, #bestAlgo{
+        font-size: 20px;
+        font-weight: bold;
+        width: 50%;
+        text-align: center;
+        padding-right: 10px;
+    }
+    input,
+    label {
+        float: left;
+    }
+
+    th {
+        background-color: #0083ff;
+        color: white;
+        border: 1px solid gray;
+    }
+
+    td{
+    	border: 1px solid gray;
+    }
+
+    table {
+        margin: 0px auto;
+        border-collapse:collapse;
+        border-radius: 5px;
+        border: 1px solid black;
+    }
+    </style>
+   
+</head>
+
+<body>
+        <label>Height:</label>
+        <input class="input_box" type="text" placeholder="Height" name="Height">
+        <br>
+        <br>
+        <br>
+        <label>Weight:</label>
+        <input class="input_box" type="text" placeholder="Weight" name="Weight">
+        <br>
+        <br>
+        <br>
+        <label>Size:</label>
+        <input class="input_box" type="text" placeholder="Size" name="Size">
+        <br>
+        <br>
+        <br>
+        <br>
+        <!-- <button >Post</button> -->
+        <button  onclick="loadDoc()">Submit</button>
+    <br>
+    <br>
+    <br>
+    <br>
+    <table width="70%" height="180px">
+        <tr>
+            <th>Algorithm</th>
+            <th>Accuracy(%)</th>
+            <th>Number of DataSets</th>
+        </tr>
+        <tr>
+            <td id="Algorithm0"></td>
+            <td id="Accuracy0"></td>
+            <td id="DataSets0"></td>
+        </tr>
+        <tr>
+            <td id="Algorithm1"></td>
+            <td id="Accuracy1"></td>
+            <td id="DataSets1"></td>
+        </tr>
+        <tr>
+            <td id="Algorithm2"></td>
+            <td id="Accuracy2"></td>
+            <td id="DataSets2"></td>
+        </tr>
+    </table>
+    <br>
+    <br>
+    <p id="prediction"></p>
+    <p id="bestAlgo"></p>
+    <script type="text/javascript">
+    	function loadDoc() {
+  var xhttp = new XMLHttpRequest();
+  var acc=[];
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+     // console.log(this.responseText);
+     var res = JSON.parse(this.responseText);
+     // console.log(res.best);
+     acc[0]=res.tree;
+     acc[1]=res.svm;
+     acc[2]=res.per;
+var algo=["Decision Tree","Support Vector Machine","Perceptron"];
+
+       for(var i=0;i<algo.length;i++)
+  {
+  document.querySelector("#DataSets"+i).textContent=4731;
+  document.querySelector("#Algorithm"+i).textContent=algo[i];
+  document.querySelector("#Accuracy"+i).textContent=acc[i];
+  }
+  var gen=res.gender;
+  gen=gen.replace(/[\[\]']+/g,'');
+  var best=res.best;
+  best=best.replace(/[\[\]']+/g,'');
+  document.querySelector("#prediction").textContent="Gender Recognized: "+gen;
+  document.querySelector("#bestAlgo").textContent="Best Algorithm: "+best;
+    }
+  };
+  var h=document.querySelector("input[name='Height']").value;
+  var w=document.querySelector("input[name='Weight']").value;
+  var s=document.querySelector("input[name='Size']").value;
+  // alert(acc);
+  
+
+
+  xhttp.open("GET", "http://localhost:3000/?Height="+h+"&Weight="+w+"&Size="+s+"", true);
+  xhttp.send();
+}
+</script>
+</body>
+
+</html>
